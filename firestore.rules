@@ -3,10 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Only these two accounts count as admins. To add or remove an admin, edit this
-    // list, publish the rules, and add/delete the user under Authentication > Users.
+    // Only these two accounts count as admins, identified by User UID (Authentication > Users).
+    // fatwa@duny.us = Auuj7...T33, a.khan120701@gmail.com = MHjOs...Vv2. To add or remove an admin,
+    // edit this list, publish the rules, and add/delete the user under Authentication > Users.
     function isAdmin() {
-      return request.auth != null && request.auth.token.email in ['a.khan120701@gmail.com', 'fatwa@duny.us'];
+      return request.auth != null && request.auth.uid in ['Auuj7lWnl4ciBdCEMMIcTCORLT33', 'MHjOs8I1aTPwHa2IhO4XUISvJvV2'];
     }
 
     // Everything below is publicly readable; only an admin may create/update/delete.

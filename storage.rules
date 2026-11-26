@@ -8,7 +8,7 @@ service firebase.storage {
 
     function isAdmin() {
       return request.auth != null
-        && request.auth.token.email in ['a.khan120701@gmail.com', 'fatwa@duny.us'];
+        && request.auth.uid in ['Auuj7lWnl4ciBdCEMMIcTCORLT33', 'MHjOs8I1aTPwHa2IhO4XUISvJvV2'];
     }
 
     match /{folder}/{file} {
