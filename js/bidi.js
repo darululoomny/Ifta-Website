@@ -18,10 +18,23 @@
     if (m && AR_RE.test(m[0])) el.classList.add('ar-line');
   }
 
+  // Fatwa/article text comes from the database as HTML. Sanitize it before it is ever
+  // parsed into the page: basic formatting tags only, no attributes, no scripts/handlers.
+  const ALLOWED_TAGS = ['p', 'div', 'br', 'b', 'strong', 'i', 'em', 'u', 'h2', 'h3', 'h4',
+                        'ul', 'ol', 'li', 'blockquote', 'sup', 'sub'];
+  function clean(html) {
+    if (root.DOMPurify) {
+      return root.DOMPurify.sanitize(String(html), { ALLOWED_TAGS: ALLOWED_TAGS, ALLOWED_ATTR: [] });
+    }
+    const t = document.createElement('div');           // sanitizer missing: fail closed, show as plain text
+    t.textContent = String(html);
+    return t.innerHTML;
+  }
+
   function wrap(html) {
     if (!html) return html;
     const box = document.createElement('div');
-    box.innerHTML = html;
+    box.innerHTML = clean(html);
     const out = document.createElement('div');
     let line = null;
 
@@ -51,5 +64,5 @@
     return out.innerHTML;
   }
 
-  root.DunyBidi = { wrap };
+  root.DunyBidi = { wrap, clean };
 })(window);

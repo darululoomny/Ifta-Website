@@ -14,6 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/pdf-lines.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/bidi.js"></script>
   <script src="js/labels.js"></script>
   <script src="js/docx-lines.js"></script>
@@ -473,6 +474,11 @@
     'Prohibition & Permissibility': 'cat-prohibition'
   };
 
+  // ── Escape text for safe insertion into HTML (text and quoted attributes) ──
+  function safe(s) {
+    return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   // ── Strip HTML tags from a string ─────────────────────────────────────────
   function stripHtml(html) {
     const d = document.createElement('div');
@@ -489,12 +495,12 @@
   // ── Build a single fatwa card ─────────────────────────────────────────────
   function buildCard(f) {
     const cls = catClass[f.category] || 'cat-general';
-    const writtenBy = f.written_by ? `<span><i class="fas fa-pen-nib"></i> ${f.written_by}</span>` : '';
+    const writtenBy = f.written_by ? `<span><i class="fas fa-pen-nib"></i> ${safe(f.written_by)}</span>` : '';
 
     const num = serialMap[f.slug];
 
     return `
-      <a href="fatwa.html?slug=${f.slug}" class="fatwa-card">
+      <a href="fatwa.html?slug=${encodeURIComponent(f.slug)}" class="fatwa-card">
         <div class="fatwa-card-body">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">
             <span class="fatwa-cat-badge ${cls}">
@@ -502,7 +508,7 @@
             </span>
             ${num ? `<span class="fatwa-serial-badge">No. ${num}</span>` : ''}
           </div>
-          <h3 dir="auto">${f.title}</h3>
+          <h3 dir="auto">${safe(f.title)}</h3>
         </div>
         <div class="fatwa-card-footer">
           <div class="fatwa-meta-row">

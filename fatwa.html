@@ -15,6 +15,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="js/fatwa-data.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/bidi.js"></script>
   <script src="js/labels.js"></script>
   <style>
@@ -130,7 +131,8 @@
     'Oaths & Vows':'cat-oaths','General':'cat-general','Prohibition & Permissibility':'cat-prohibition'
   };
 
-  function esc(s) { return (s || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function esc(s) { return (s == null ? '' : s).toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function safeUrl(u) { return /^https?:\/\//i.test(u || '') ? u : '#'; }
   function formatDate(str) {
     if (!str) return '';
     const d = new Date(str + 'T12:00:00');
@@ -226,7 +228,7 @@
 
         ${f.pdf_url ? `<div class="lib-actions" style="margin-bottom:1rem;">
           <a class="btn btn-navy lib-btn" href="reader.html?type=fatawaas&id=${encodeURIComponent(f.slug)}"><i class="fas fa-book-open"></i> Read the PDF</a>
-          <a class="btn btn-outline-gold lib-btn" href="${esc(f.pdf_url)}" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download PDF</a>
+          <a class="btn btn-outline-gold lib-btn" href="${esc(safeUrl(f.pdf_url))}" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download PDF</a>
         </div>` : ''}
 
         <div class="fatwa-share">
