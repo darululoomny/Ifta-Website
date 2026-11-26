@@ -1388,11 +1388,17 @@
           if (idx >= 0) { updated.id = arr[idx].id; if (arr[idx].added) updated.added = arr[idx].added; arr[idx] = updated; }
           else arr.unshift(updated);
           saveLocal(arr);
-          fbSaveFatwa(updated);
+          reportSave(fbSaveFatwa(updated));
         } else {
+          // A fatwa from data/fatwas.json: keep this browser's override, and also save the
+          // edited copy to Firestore so every visitor (and the other admin) sees the change.
           const overrides = getOverrides();
           overrides[editSlug] = updated;
           saveOverrides(overrides);
+          if (prev.id != null) updated.id = prev.id;
+          if (prev.added) updated.added = prev.added;
+          if (prev.mufti) updated.mufti = prev.mufti;
+          reportSave(fbSaveFatwa(updated));
         }
         allFatwas = allFatwas.map(f => f.slug === editSlug ? updated : f);
         document.getElementById('success-msg-text').textContent = 'Fatwā updated!';
@@ -1405,7 +1411,7 @@
           date, category, keywords: [...admKeywords], references, madhab, added: Date.now() };
         if (pdfInfo) Object.assign(fatwa, pdfInfo);
         saveLocal([fatwa, ...existing]);
-        fbSaveFatwa(fatwa);
+        reportSave(fbSaveFatwa(fatwa));
         allFatwas = [fatwa, ...allFatwas];
         document.getElementById('success-msg-text').textContent = 'Fatwā uploaded!';
       }
@@ -1543,8 +1549,15 @@
   initFirebase();
 
   async function fbSaveFatwa(fatwa) {
-    if (!db) return;
-    try { await db.collection('fatwas').doc(fatwa.slug).set(fatwa); } catch(e) { console.warn('FB save failed:', e); }
+    if (!db) return false;
+    try { await db.collection('fatwas').doc(fatwa.slug).set(fatwa); return true; }
+    catch(e) { console.warn('FB save failed:', e); return false; }
+  }
+  // Tell the admin when a save did not reach the server (it would otherwise look successful).
+  function reportSave(promise) {
+    promise.then(ok => {
+      if (!ok) alert('Saved in this browser only. It could NOT be saved to the server, so other people will not see it. Make sure you are logged in as an admin, then try again.');
+    });
   }
   async function fbDeleteFatwa(slug) {
     if (!db) return;
