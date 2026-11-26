@@ -1879,3 +1879,13 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, input:focus-visible, 
 .books-list { margin: 0; padding: 0 1.6rem 0 0; font-size: 1.2rem; line-height: 1.9; }
 .books-list li { padding: .1rem 0; border-bottom: 1px solid var(--gold-pale); }
 .books-total { text-align: center; margin: 1rem 0 0; font-weight: 700; color: var(--navy); font-size: 1.15rem; }
+
+/* ---- Fatwa / article category colors (shared) ----
+   Five families so the colors are learnable; all pass WCAG AA with white text. */
+.cat-salah, .cat-sawm, .cat-purification, .cat-hajj      { --cat: #1A4B8C; } /* worship: blue   */
+.cat-zakaat, .cat-business, .cat-endowments, .cat-inheritance { --cat: #7A5F0E; } /* money: bronze   */
+.cat-marriage, .cat-divorce                               { --cat: #6B2179; } /* family: plum    */
+.cat-food                                                 { --cat: #1E6B3A; } /* food: green     */
+.cat-funerals, .cat-oaths, .cat-prohibition               { --cat: #3E4C5E; } /* other: slate    */
+.cat-general                                              { --cat: #0C1F3D; } /* general: navy   */
+.fatwa-cat-badge { background: var(--cat, #0C1F3D); color: #fff; }

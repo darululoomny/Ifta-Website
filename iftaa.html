@@ -97,7 +97,8 @@
       gap: 0.5rem;
     }
     .cat-filter-btn {
-      padding: 0.4rem 1rem;
+      min-height: 40px;
+      padding: 0.5rem 1rem;
       border-radius: 50px;
       border: 2px solid var(--border);
       background: var(--white);
@@ -114,10 +115,11 @@
       color: var(--gold-dark);
     }
     .cat-filter-btn.active {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: var(--gold);
+      background: var(--cat, var(--navy));
+      border-color: var(--cat, var(--navy));
+      color: #fff;
     }
+    .cat-filter-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
     /* ---- Fatwa Grid ---- */
     .iftaa-main { padding: 3rem 0 5rem; }
@@ -209,21 +211,6 @@
       font-family: 'Poppins', sans-serif;
       white-space: nowrap;
     }
-    .cat-salah        { background:#1A4B8C;color:#fff; }
-    .cat-zakaat       { background:#9E7D18;color:#fff; }
-    .cat-sawm         { background:#1A6090;color:#fff; }
-    .cat-business     { background:#1E8449;color:#fff; }
-    .cat-food         { background:#B03A2E;color:#fff; }
-    .cat-marriage     { background:#7D3C98;color:#fff; }
-    .cat-divorce      { background:#922B21;color:#fff; }
-    .cat-purification { background:#1565C0;color:#fff; }
-    .cat-funerals     { background:#424242;color:#fff; }
-    .cat-hajj         { background:#00695C;color:#fff; }
-    .cat-inheritance  { background:#4A148C;color:#fff; }
-    .cat-endowments   { background:#E65100;color:#fff; }
-    .cat-oaths        { background:#01579B;color:#fff; }
-    .cat-general      { background:var(--navy);color:#fff; }
-    .cat-prohibition  { background:#6B2179;color:#fff; }
     .fatwa-card h3 {
       font-size: 1rem;
       margin: 0.6rem 0 0;
@@ -334,15 +321,17 @@
     .upload-cta .btn { position: relative; flex-shrink: 0; }
 
     @media (max-width: 1024px) { .fatwa-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px)  { .fatwa-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px)  {
+      .fatwa-grid { grid-template-columns: 1fr; }
+      .category-filter-bar { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding-bottom: 0.5rem; -webkit-overflow-scrolling: touch; }
+    }
     @media (max-width: 768px) { .iftaa-search-section { top: 0; } }
 
-    /* Fataawas page typography: Times New Roman, 12pt, throughout (icons excluded) */
+    /* Fataawas page typography: Times New Roman throughout (icons excluded); sizes follow the normal type scale */
     #fataawas-hero, #fataawas-hero *:not(i),
     .iftaa-search-section, .iftaa-search-section *:not(i),
     .iftaa-main, .iftaa-main *:not(i) {
       font-family: 'Times New Roman', Times, serif !important;
-      font-size: 12pt !important;
     }
   </style>
 </head>
@@ -375,22 +364,22 @@
         <button id="clear-search" aria-label="Clear search">&times;</button>
       </div>
       <div class="category-filter-bar" id="category-filters">
-        <button class="cat-filter-btn active" data-cat="all">All Categories</button>
-        <button class="cat-filter-btn" data-cat="Salah"><i class="fas fa-mosque"></i> Ṣalāh</button>
-        <button class="cat-filter-btn" data-cat="Zakaat"><i class="fas fa-hand-holding-heart"></i> Zakāt</button>
-        <button class="cat-filter-btn" data-cat="Sawm"><i class="fas fa-moon"></i> Ṣawm</button>
-        <button class="cat-filter-btn" data-cat="Purification"><i class="fas fa-droplet"></i> Purification</button>
-        <button class="cat-filter-btn" data-cat="Hajj & Umrah"><i class="fas fa-kaaba"></i> Ḥajj &amp; ʿUmrah</button>
-        <button class="cat-filter-btn" data-cat="Marriage & Family"><i class="fas fa-heart"></i> Marriage</button>
-        <button class="cat-filter-btn" data-cat="Divorce"><i class="fas fa-heart-crack"></i> Divorce</button>
-        <button class="cat-filter-btn" data-cat="Business & Finance"><i class="fas fa-coins"></i> Business</button>
-        <button class="cat-filter-btn" data-cat="Food & Drink"><i class="fas fa-utensils"></i> Food &amp; Drink</button>
-        <button class="cat-filter-btn" data-cat="Funerals"><i class="fas fa-circle"></i> Funerals</button>
-        <button class="cat-filter-btn" data-cat="Inheritance"><i class="fas fa-scroll"></i> Inheritance</button>
-        <button class="cat-filter-btn" data-cat="Endowments"><i class="fas fa-hand-holding"></i> Endowments</button>
-        <button class="cat-filter-btn" data-cat="Oaths & Vows"><i class="fas fa-hands-praying"></i> Oaths &amp; Vows</button>
-        <button class="cat-filter-btn" data-cat="General"><i class="fas fa-circle-info"></i> General</button>
-        <button class="cat-filter-btn" data-cat="Prohibition & Permissibility"><i class="fas fa-ban"></i> Prohibition &amp; Permissibility</button>
+        <button class="cat-filter-btn active" data-cat="all" aria-pressed="true">All Categories</button>
+        <button class="cat-filter-btn cat-salah" data-cat="Salah" aria-pressed="false"><i class="fas fa-mosque"></i> Ṣalāh</button>
+        <button class="cat-filter-btn cat-zakaat" data-cat="Zakaat" aria-pressed="false"><i class="fas fa-hand-holding-heart"></i> Zakāt</button>
+        <button class="cat-filter-btn cat-sawm" data-cat="Sawm" aria-pressed="false"><i class="fas fa-moon"></i> Ṣawm</button>
+        <button class="cat-filter-btn cat-purification" data-cat="Purification" aria-pressed="false"><i class="fas fa-droplet"></i> Purification</button>
+        <button class="cat-filter-btn cat-hajj" data-cat="Hajj & Umrah" aria-pressed="false"><i class="fas fa-kaaba"></i> Ḥajj &amp; ʿUmrah</button>
+        <button class="cat-filter-btn cat-marriage" data-cat="Marriage & Family" aria-pressed="false"><i class="fas fa-heart"></i> Marriage</button>
+        <button class="cat-filter-btn cat-divorce" data-cat="Divorce" aria-pressed="false"><i class="fas fa-heart-crack"></i> Divorce</button>
+        <button class="cat-filter-btn cat-business" data-cat="Business & Finance" aria-pressed="false"><i class="fas fa-coins"></i> Business</button>
+        <button class="cat-filter-btn cat-food" data-cat="Food & Drink" aria-pressed="false"><i class="fas fa-utensils"></i> Food &amp; Drink</button>
+        <button class="cat-filter-btn cat-funerals" data-cat="Funerals" aria-pressed="false"><i class="fas fa-dove"></i> Funerals</button>
+        <button class="cat-filter-btn cat-inheritance" data-cat="Inheritance" aria-pressed="false"><i class="fas fa-scroll"></i> Inheritance</button>
+        <button class="cat-filter-btn cat-endowments" data-cat="Endowments" aria-pressed="false"><i class="fas fa-hand-holding"></i> Endowments</button>
+        <button class="cat-filter-btn cat-oaths" data-cat="Oaths & Vows" aria-pressed="false"><i class="fas fa-hands-praying"></i> Oaths &amp; Vows</button>
+        <button class="cat-filter-btn cat-general" data-cat="General" aria-pressed="false"><i class="fas fa-circle-info"></i> General</button>
+        <button class="cat-filter-btn cat-prohibition" data-cat="Prohibition & Permissibility" aria-pressed="false"><i class="fas fa-ban"></i> Prohibition &amp; Permissibility</button>
       </div>
     </div>
   </div>
@@ -398,9 +387,9 @@
   <!-- MAIN CONTENT -->
   <section class="iftaa-main">
     <div class="container">
-      <p class="upload-note"><i class="fas fa-circle-info"></i> Darul Iftaa Darul Uloom is in the process of uploading all of their previous fatāwā from the past ten years.</p>
+      <p class="upload-note"><i class="fas fa-circle-info"></i> We are uploading our fatāwā from the past ten years — more are added regularly.</p>
       <div class="results-bar">
-        <p class="results-count">Showing <strong id="result-count">0</strong> fatwā(s)</p>
+        <p class="results-count">Showing <strong id="result-count">0</strong> <span id="result-noun">fatāwā</span></p>
         <select class="sort-select" id="sort-select">
           <option value="newest">Recently Added First</option>
           <option value="number">Number (1, 2, 3…)</option>
@@ -509,7 +498,7 @@
         <div class="fatwa-card-body">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">
             <span class="fatwa-cat-badge ${cls}">
-              <i class="fas fa-scale-balanced"></i> ${catLabel(f.category)}
+              ${catLabel(f.category)}
             </span>
             ${num ? `<span class="fatwa-serial-badge">No. ${num}</span>` : ''}
           </div>
@@ -559,6 +548,7 @@
 
     const grid = document.getElementById('fatwa-grid');
     document.getElementById('result-count').textContent = list.length;
+    document.getElementById('result-noun').textContent = list.length === 1 ? 'fatwā' : 'fatāwā';
 
     if (!list.length) {
       grid.innerHTML = `<div class="no-results">
@@ -621,8 +611,9 @@
 
   document.querySelectorAll('.cat-filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.cat-filter-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
       this.classList.add('active');
+      this.setAttribute('aria-pressed','true');
       activeCategory = this.dataset.cat;
       renderFatwas();
     });
@@ -644,6 +635,7 @@
     activeCategory = urlCat;
     document.querySelectorAll('.cat-filter-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.cat === urlCat);
+      b.setAttribute('aria-pressed', b.dataset.cat === urlCat ? 'true' : 'false');
     });
   }
 
@@ -1136,21 +1128,6 @@
   .fp-preview-card .attr-name { font-family: 'Playfair Display',serif; font-size: 1rem; color: var(--navy); font-weight: 600; margin-bottom: 0.1rem; }
   .fp-preview-card .attr-title { font-size: 0.83rem; color: #555; }
   .fp-preview-card .fatwa-cat-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.25rem 0.75rem; border-radius: 50px; margin-bottom: 0.85rem; }
-  .fp-preview-card .cat-salah{background:#1A4B8C;color:#fff}
-  .fp-preview-card .cat-zakaat{background:#9E7D18;color:#fff}
-  .fp-preview-card .cat-sawm{background:#1A6090;color:#fff}
-  .fp-preview-card .cat-business{background:#1E8449;color:#fff}
-  .fp-preview-card .cat-food{background:#B03A2E;color:#fff}
-  .fp-preview-card .cat-marriage{background:#7D3C98;color:#fff}
-  .fp-preview-card .cat-divorce{background:#922B21;color:#fff}
-  .fp-preview-card .cat-purification{background:#1565C0;color:#fff}
-  .fp-preview-card .cat-funerals{background:#424242;color:#fff}
-  .fp-preview-card .cat-hajj{background:#00695C;color:#fff}
-  .fp-preview-card .cat-inheritance{background:#4A148C;color:#fff}
-  .fp-preview-card .cat-endowments{background:#E65100;color:#fff}
-  .fp-preview-card .cat-oaths{background:#01579B;color:#fff}
-  .fp-preview-card .cat-general{background:#0C1F3D;color:#fff}
-  .fp-preview-card .cat-prohibition{background:#6B2179;color:#fff}
 
   .adm-tab-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; gap: 1rem; }
   .adm-tab-header h2 { font-family: 'Playfair Display',serif; color: var(--navy); font-size: 1.3rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -2051,7 +2028,7 @@
       <div class="fp-refs-body">${DunyBidi.wrap(refsHtml)}</div>` : '';
 
     document.getElementById('fp-preview-card').innerHTML = `
-      <span class="fatwa-cat-badge ${cls}"><i class="fas fa-scale-balanced"></i> ${esc(catLabel(category))}</span>
+      <span class="fatwa-cat-badge ${cls}">${esc(catLabel(category))}</span>
       <h2 style="font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--navy);margin-bottom:0.4rem;line-height:1.3;">${esc(title)}</h2>
       ${dateStr ? `<p style="font-size:0.82rem;color:#888;margin-bottom:2rem;">${dateStr}</p>` : ''}
 
